@@ -1,0 +1,31 @@
+name: alg_bucket
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  fluent_ui: 4.9.1
+  firebase_core: 3.4.0
+  firebase_auth: 5.2.0
+  google_sign_in: 6.2.1
+  flutter_bloc: 8.1.6
+  firebase_analytics: 11.3.0
+  equatable: 2.0.5
+  bloc_concurrency: 0.2.5
+  dartz: 0.10.1
+  google_sign_in_platform_interface: 2.4.5
+  cloud_firestore: 5.4.0
+  cube_ui:
+    path: packages/cube_ui
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 3.0.0
+flutter:
+  uses-material-design: true

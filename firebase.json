@@ -1,0 +1,52 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "alg-bucket",
+          "appId": "1:564373388241:android:627702bdb99ef9a9f3bef0",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "alg-bucket",
+          "appId": "1:564373388241:ios:198eb358ddd42ec4f3bef0",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "alg-bucket",
+          "appId": "1:564373388241:ios:198eb358ddd42ec4f3bef0",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "alg-bucket",
+          "configurations": {
+            "android": "1:564373388241:android:627702bdb99ef9a9f3bef0",
+            "ios": "1:564373388241:ios:198eb358ddd42ec4f3bef0",
+            "macos": "1:564373388241:ios:198eb358ddd42ec4f3bef0",
+            "web": "1:564373388241:web:d2297e71e80506f8f3bef0",
+            "windows": "1:564373388241:web:fd31723afedeb601f3bef0"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "europe-west1"
+    }
+  }
+}

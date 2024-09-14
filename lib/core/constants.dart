@@ -1,0 +1,2 @@
+
+const bool kMock = true;

@@ -5,14 +5,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
-import '../constants.dart';
+import '../env.dart';
 
-class FirebaseAuthService {
-  FirebaseAuthService._internal();
+typedef GoogleSignInResponse = Either<({dynamic error, StackTrace stackTrace}),
+    ({UserCredential? userCredential, GoogleSignInAccount? googleSignInAccount})>;
 
-  static final FirebaseAuthService _instance = FirebaseAuthService._internal();
+typedef GoogleLogoutResponse = Either<({dynamic error, StackTrace stackTrace}), Unit>;
 
-  static FirebaseAuthService get instance => _instance;
+abstract interface class FirebaseAuthService {
+  static FirebaseAuthService get instance =>
+      isDev ? MockFirebaseAuthService._instance : FirebaseAuthServiceImpl._instance;
+
+  Future<GoogleSignInResponse> signInWithGoogle();
+
+  Future<GoogleSignInResponse> signSilently();
+
+  Future<GoogleLogoutResponse> logOut();
+}
+
+class FirebaseAuthServiceImpl implements FirebaseAuthService {
+  FirebaseAuthServiceImpl._internal();
+
+  static final FirebaseAuthService _instance = FirebaseAuthServiceImpl._internal();
 
   GoogleSignIn? googleSignIn;
 
@@ -29,9 +43,8 @@ class FirebaseAuthService {
     }
   }
 
-  Future<
-      Either<({dynamic error, StackTrace stackTrace}),
-          ({UserCredential userCredential, GoogleSignInAccount googleSignInAccount})>> signInWithGoogle() async {
+  @override
+  Future<GoogleSignInResponse> signInWithGoogle() async {
     try {
       await initialize();
 
@@ -59,9 +72,8 @@ class FirebaseAuthService {
     }
   }
 
-  Future<
-      Either<({dynamic error, StackTrace stackTrace}),
-          ({UserCredential? userCredential, GoogleSignInAccount? googleSignInAccount})>> signSilently() async {
+  @override
+  Future<GoogleSignInResponse> signSilently() async {
     try {
       await initialize();
 
@@ -88,6 +100,7 @@ class FirebaseAuthService {
     }
   }
 
+  @override
   Future<Either<({dynamic error, StackTrace stackTrace}), Unit>> logOut() async {
     try {
       await googleSignIn?.signOut();
@@ -102,5 +115,26 @@ class FirebaseAuthService {
       );
       return Left((error: e, stackTrace: s));
     }
+  }
+}
+
+class MockFirebaseAuthService extends FirebaseAuthService {
+  MockFirebaseAuthService._internal();
+
+  static final MockFirebaseAuthService _instance = MockFirebaseAuthService._internal();
+
+  @override
+  Future<GoogleSignInResponse> signInWithGoogle() {
+    return Future.value(const Right((userCredential: null, googleSignInAccount: null)));
+  }
+
+  @override
+  Future<GoogleSignInResponse> signSilently() {
+    return Future.value(const Right((userCredential: null, googleSignInAccount: null)));
+  }
+
+  @override
+  Future<GoogleLogoutResponse> logOut() {
+    return Future.value(const Right(unit));
   }
 }

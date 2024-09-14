@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 class CubeWidget extends StatefulWidget {
   const CubeWidget({
     this.textEditingController,
-    this.ignoreLL = false,
+    this.ignoreMap,
     super.key,
   });
 
   final TextEditingController? textEditingController;
 
-  final bool ignoreLL;
+  final Map<String, List<int>>? ignoreMap;
 
   @override
   State<CubeWidget> createState() => _CubeWidgetState();
@@ -22,17 +22,7 @@ class CubeWidget extends StatefulWidget {
 class _CubeWidgetState extends State<CubeWidget> {
   late final DiTreDiController _controller;
   final List<Group3D> _cubies = [];
-
-  late final ignoreMap = {
-    '014': {0, 1, 4},
-    '01':  {1},
-    '012': {0, 1, 2},
-    '02': {2},
-    '023': {0, 2, 3},
-    '03': {3},
-    '034': {0, 3, 4},
-    '04': {4},
-  };
+  var ignore = <String, Set<int>>{};
 
   @override
   void initState() {
@@ -49,7 +39,13 @@ class _CubeWidgetState extends State<CubeWidget> {
       });
     }
 
-    _cubies.add(Cube3d(const CubeStateEntity(), ignore: ignoreMap));
+    if (widget.ignoreMap != null) {
+      for (var key in widget.ignoreMap!.keys) {
+        ignore[key] = widget.ignoreMap![key]!.toSet();
+      }
+    }
+
+    _cubies.add(Cube3d(const CubeStateEntity(), ignore: ignore));
   }
 
   @override
@@ -87,7 +83,7 @@ class _CubeWidgetState extends State<CubeWidget> {
     final newState = MoveService().executeAlgorithm(const CubeStateEntity(), AlgService().invertAlgorithm(alg));
     _cubies.clear();
     _cubies.add(
-      Cube3d(newState, ignore: ignoreMap),
+      Cube3d(newState, ignore: ignore),
     );
     setState(() {});
   }

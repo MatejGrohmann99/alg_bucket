@@ -6,6 +6,7 @@ class AlgService {
   static final _instance = AlgService._internal();
 
   factory AlgService() => _instance;
+
   AlgService._internal();
 
   List<CM> getAlgorithmFromString(String source) {
@@ -34,6 +35,17 @@ class AlgService {
     return alg;
   }
 
+  String convertAlgorithmToString(List<CM> alg) {
+    var as = '';
+    for (var i = 0; i < alg.length; i++) {
+      as += _moveToString(alg[i]);
+      if (i != alg.length - 1) {
+        as += ' ';
+      }
+    }
+    return as;
+  }
+
   List<CM> invertAlgorithm(List<CM> algorithm) {
     final inverseAlgorithm = <CM>[];
     for (final move in algorithm) {
@@ -41,6 +53,65 @@ class AlgService {
       inverseAlgorithm.insert(0, inverseMove);
     }
     return inverseAlgorithm;
+  }
+
+  String _moveToString(CM m) {
+    return switch (m) {
+      CM.U => 'U',
+      CM.U2 => 'U2',
+      CM.Ui => 'U\'',
+      CM.D => 'D',
+      CM.D2 => 'D2',
+      CM.Di => 'D\'',
+      CM.L => 'L',
+      CM.L2 => 'L2',
+      CM.Li => 'L\'',
+      CM.R => 'R',
+      CM.R2 => 'R2',
+      CM.Ri => 'R\'',
+      CM.F => 'F',
+      CM.F2 => 'F2',
+      CM.Fi => 'F\'',
+      CM.B => 'B',
+      CM.B2 => 'B2',
+      CM.Bi => 'B\'',
+      CM.Uw => 'Uw',
+      CM.Uw2 => 'Uw2',
+      CM.Uwi => 'Uw\'',
+      CM.Dw => 'Dw',
+      CM.Dw2 => 'Dw2',
+      CM.Dwi => 'Dw\'',
+      CM.Lw => 'Lw',
+      CM.Lw2 => 'Lw2',
+      CM.Lwi => 'Lw\'',
+      CM.Rw => 'Rw',
+      CM.Rw2 => 'Rw2',
+      CM.Rwi => 'Rw\'',
+      CM.Fw => 'Fw',
+      CM.Fw2 => 'Fw2',
+      CM.Fwi => 'Fw\'',
+      CM.Bw => 'Bw',
+      CM.Bw2 => 'Bw2',
+      CM.Bwi => 'Bw\'',
+      CM.M => 'M',
+      CM.M2 => 'M2',
+      CM.Mi => 'M\'',
+      CM.E => 'E',
+      CM.E2 => 'E2',
+      CM.Ei => 'E\'',
+      CM.S => 'S',
+      CM.S2 => 'S2',
+      CM.Si => 'S\'',
+      CM.X => 'x',
+      CM.X2 => 'x2',
+      CM.Xi => 'x\'',
+      CM.Y => 'y',
+      CM.Y2 => 'y2',
+      CM.Yi => 'y\'',
+      CM.Z => 'z',
+      CM.Z2 => 'z2',
+      CM.Zi => 'z\'',
+    };
   }
 
   CM? _tryParseMove(String s) {

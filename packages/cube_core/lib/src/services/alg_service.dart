@@ -9,7 +9,9 @@ class AlgService {
 
   AlgService._internal();
 
-  List<CM> getAlgorithmFromString(String source) {
+  List<CM> getAlgorithmFromString(String s) {
+    final source = s.replaceAll(RegExp(r'[\[\](){\}]'), '');
+
     final alg = <CM>[];
     for (final i in source.split(' ')) {
       if (i.isEmpty) {
@@ -126,19 +128,19 @@ class AlgService {
       'L2' => CM.L2,
       'L\'' || 'L’' => CM.Li,
       'R' => CM.R,
-      'R2' => CM.R2,
+      'R2' || 'R2\'' => CM.R2,
       'R\'' || 'R’' => CM.Ri,
       'F' => CM.F,
-      'F2' => CM.F2,
+      'F2' || 'F2\'' => CM.F2,
       'F\'' || 'F’' => CM.Fi,
       'B' => CM.B,
-      'B2' => CM.B2,
+      'B2' || 'B2\'' => CM.B2,
       'B\'' || 'B’' => CM.Bi,
       'u' || 'Uw' => CM.Uw,
-      'u2' || 'Uw2' => CM.Uw2,
+      'u2' || 'Uw2' || 'U2\'' || 'Uw2\'' => CM.Uw2,
       'u\'' || 'u’' || 'Uw\'' || 'Uw’' => CM.Uwi,
       'd' || 'Dw' => CM.Dw,
-      'd2' || 'Dw2' => CM.Dw2,
+      'd2' || 'Dw2' || 'Dw2\'' || 'd2\'' => CM.Dw2,
       'd\'' || 'd’' || 'Dw\'' || 'Dw’' => CM.Dwi,
       'l' || 'Lw' => CM.Lw,
       'l2' || 'Lw2' => CM.Lw2,

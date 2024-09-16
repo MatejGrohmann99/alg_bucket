@@ -22,10 +22,12 @@ class WebApp extends StatelessWidget {
             ),
         )
       ],
-      child: const FluentApp(
+      child: FluentApp(
         themeMode: ThemeMode.dark,
+        darkTheme: FluentThemeData.dark(),
+        theme: FluentThemeData.light(),
         title: 'Alg bucket',
-        home: NavigationPage(),
+        home: const NavigationPage(),
       ),
     );
   }

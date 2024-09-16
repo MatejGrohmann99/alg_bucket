@@ -13,6 +13,7 @@ class Algset extends Equatable {
     this.imageSetup = const [],
     this.ignoreConfig,
     this.parentId,
+    this.useFirstCaseAsDisplayImage = true,
   });
 
   final String id;
@@ -27,6 +28,8 @@ class Algset extends Equatable {
 
   final List<Algorithm> cases;
 
+  final bool useFirstCaseAsDisplayImage;
+
   Algset addCase(Algorithm alg) {
     return Algset(
       id: id,
@@ -35,6 +38,7 @@ class Algset extends Equatable {
       imageSetup: imageSetup,
       ignoreConfig: ignoreConfig,
       parentId: parentId,
+      useFirstCaseAsDisplayImage: useFirstCaseAsDisplayImage,
     );
   }
 
@@ -46,17 +50,21 @@ class Algset extends Equatable {
       'cases': cases.map((e) => e.toJson()).toList(),
       'ignore': jsonEncode(ignoreConfig),
       'parentId': parentId,
+      'useFirstCaseAsDisplayImage': useFirstCaseAsDisplayImage,
     };
   }
 
   static Algset? fromJson(String id, dynamic json) {
+    final useFirstCaseAsDisplayImage = json['useFirstCaseAsDisplayImage'] as bool? ?? true;
+
     final name = json['name'] as String;
     final cases = (json['cases'] as List<dynamic>?)?.map((e) => Algorithm.fromJson(e)).nonNulls.toList();
     final ignoreConfig = jsonDecode(json['ignore']) as Map?;
     var ignoreConfigMap = <String, List<int>>{};
     final parentId = json['parentId'] as String?;
-    final imageSetup =
-        json['imageSetup'] != null ? AlgService().getAlgorithmFromString(json['imageSetup'] as String) : null;
+    final imageSetup = json['imageSetup'] != null && json['imageSetup'] is String && json['imageSetup'].isNotEmpty
+        ? AlgService().getAlgorithmFromString(json['imageSetup'] as String)
+        : (useFirstCaseAsDisplayImage ? cases?.firstOrNull?.setup ?? <CM>[] : <CM>[]);
 
     if (ignoreConfig != null) {
       ignoreConfigMap = ignoreConfig.map((key, value) {
@@ -68,9 +76,10 @@ class Algset extends Equatable {
       id: id,
       name: name,
       cases: cases ?? [],
-      imageSetup: imageSetup ?? [],
+      imageSetup: imageSetup,
       ignoreConfig: ignoreConfigMap,
       parentId: parentId,
+      useFirstCaseAsDisplayImage: useFirstCaseAsDisplayImage,
     );
   }
 

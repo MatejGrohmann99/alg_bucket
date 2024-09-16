@@ -16,7 +16,9 @@ class AlgsetListStateLoading extends AlgsetListState {
 }
 
 class AlgsetListStateLoaded extends AlgsetListState {
-  const AlgsetListStateLoaded({required this.algsetList});
+  const AlgsetListStateLoaded({
+    required this.algsetList,
+  });
 
   final List<Algset> algsetList;
 

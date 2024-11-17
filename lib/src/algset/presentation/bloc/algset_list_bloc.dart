@@ -31,7 +31,7 @@ class AlgsetListBloc extends Bloc<AlgsetListEvent, AlgsetListState> {
 
   Future<void> _onLoad(Emitter<AlgsetListState> emit) async {
     emit(const AlgsetListStateLoading());
-
+    await Future.delayed(const Duration(milliseconds: 100));
     await AlgsetApiInterface.instance.getUserAlgsets().then(
           (getResponse) async => getResponse.fold(
             (l) => emit(AlgsetListStateError(l)),
@@ -42,6 +42,7 @@ class AlgsetListBloc extends Bloc<AlgsetListEvent, AlgsetListState> {
 
   Future<void> _onUpdate(Algset algset, Emitter<AlgsetListState> emit) async {
     emit(const AlgsetListStateLoading());
+    await Future.delayed(const Duration(milliseconds: 100));
     await AlgsetApiInterface.instance.updateAlgset(algset).then(
           (updateResponse) async => await updateResponse.fold(
             (l) async => emit(AlgsetListStateError(l)),
@@ -57,7 +58,7 @@ class AlgsetListBloc extends Bloc<AlgsetListEvent, AlgsetListState> {
 
   Future<void> _onAdd(Algset algset, Emitter<AlgsetListState> emit) async {
     emit(const AlgsetListStateLoading());
-
+    await Future.delayed(const Duration(milliseconds: 100));
     await AlgsetApiInterface.instance.addAlgset(algset).then(
           (addResponse) async => await addResponse.fold(
             (l) async => emit(AlgsetListStateError(l)),

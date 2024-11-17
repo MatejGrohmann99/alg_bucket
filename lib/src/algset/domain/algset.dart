@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:cube_core/cube_core.dart';
 import 'package:equatable/equatable.dart';
 
@@ -42,6 +43,32 @@ class Algset extends Equatable {
     );
   }
 
+  Algset editAlgorithm(Algorithm alg, int index) {
+    final newCases = cases.mapIndexed((i, e) => i == index ? alg : e).toList();
+    return Algset(
+      id: id,
+      name: name,
+      cases: newCases,
+      imageSetup: imageSetup,
+      ignoreConfig: ignoreConfig,
+      parentId: parentId,
+      useFirstCaseAsDisplayImage: useFirstCaseAsDisplayImage,
+    );
+  }
+
+  Algset removeCase(int index) {
+    final newCases = cases.whereIndexed((i, _) => i != index).toList();
+    return Algset(
+      id: id,
+      name: name,
+      cases: newCases,
+      imageSetup: imageSetup,
+      ignoreConfig: ignoreConfig,
+      parentId: parentId,
+      useFirstCaseAsDisplayImage: useFirstCaseAsDisplayImage,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -54,7 +81,7 @@ class Algset extends Equatable {
     };
   }
 
-  static Algset? fromJson(String id, dynamic json) {
+  static Algset fromJson(String id, dynamic json) {
     final useFirstCaseAsDisplayImage = json['useFirstCaseAsDisplayImage'] as bool? ?? true;
 
     final name = json['name'] as String;

@@ -10,11 +10,14 @@ class CubeImageWidget extends StatefulWidget {
   const CubeImageWidget({
     this.setup,
     this.ignoreMap,
+    this.rotateOnClick = false,
     this.size = 200,
     super.key,
   });
 
   final double size;
+
+  final bool rotateOnClick;
 
   final List<CM>? setup;
   final Map<String, List<int>>? ignoreMap;
@@ -74,15 +77,45 @@ class _CubeImageWidgetState extends State<CubeImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: !isLoaded
-          ? const SizedBox.expand()
-          : DiTreDi(
-              controller: _controller,
-              figures: _cubies,
-            ),
-    );
+    final content = !isLoaded
+        ? const SizedBox.expand()
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: widget.size,
+                height: widget.size,
+                child: DiTreDi(
+                  controller: _controller,
+                  figures: _cubies,
+                ),
+              ),
+              if (widget.rotateOnClick && false)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      child: const Icon(
+                        Icons.rotate_left,
+                        size: 12,
+                      ),
+                      onTap: () {
+                        _controller.rotationY -= 90;
+                      },
+                    ),
+                    GestureDetector(
+                      child: const Icon(
+                        Icons.rotate_right,
+                        size: 12,
+                      ),
+                      onTap: () {
+                        _controller.rotationY += 90;
+                      },
+                    ),
+                  ],
+                ),
+            ],
+          );
+    return content;
   }
 }

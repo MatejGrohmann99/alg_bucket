@@ -2,7 +2,6 @@ import 'package:alg_bucket/src/algset/presentation/algorithm_case_list_tile.dart
 import 'package:alg_bucket/src/algset/presentation/algset_creator_expander.dart';
 import 'package:alg_bucket/src/algset/presentation/algset_list_tile.dart';
 import 'package:alg_bucket/src/algset/presentation/bloc/algset_list_bloc.dart';
-import 'package:cube_core/cube_core.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cube_ui/cube_ui.dart';
@@ -51,8 +50,8 @@ class _HomePageContentViewState extends State<HomePageContentView> {
                           name: name,
                           cases: const [],
                           imageSetup: const [],
-                          ignoreConfig: state.algsetList[_items.last.value].ignoreConfig,
-                          parentId: state.algsetList[_items.last.value].id,
+                          ignoreConfig: _items.isNotEmpty ? state.algsetList[_items.last.value].ignoreConfig : null,
+                          parentId: _items.isNotEmpty ? state.algsetList[_items.last.value].id : null,
                         ),
                       ),
                     );
@@ -192,7 +191,31 @@ class _HomePageContentViewState extends State<HomePageContentView> {
 
                           final singleCase = state.algsetList[_items.last.value].cases[index - 1];
                           final ignoreMap = state.algsetList[_items.last.value].ignoreConfig;
-                          return AlgorithmCaseListTile(index: index, alg: singleCase, ignoreMap: ignoreMap);
+                          return AlgorithmCaseListTile(
+                            index: index,
+                            alg: singleCase,
+                            ignoreMap: ignoreMap,
+                            onEdit: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const ContentDialog(
+                                    title: Text('Edit algorithm'),
+                                    content: Text('Nemáte někdo voheň do píči?'),
+                                  );
+                                },
+                              );
+                            },
+                            onDelete: () {
+                              final algset = state.algsetList[_items.last.value];
+                              final removedAlg = algset.removeCase(index - 1);
+                              context.read<AlgsetListBloc>().add(
+                                    AlgsetListEventUpdate(
+                                      algset: removedAlg,
+                                    ),
+                                  );
+                            },
+                          );
                         },
                       ),
                     ),

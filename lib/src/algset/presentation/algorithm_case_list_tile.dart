@@ -8,6 +8,8 @@ class AlgorithmCaseListTile extends StatelessWidget {
     required this.index,
     required this.alg,
     required this.ignoreMap,
+    required this.onDelete,
+    required this.onEdit,
     super.key,
   });
 
@@ -15,25 +17,80 @@ class AlgorithmCaseListTile extends StatelessWidget {
   final Algorithm alg;
   final IgnoreMap? ignoreMap;
 
+  final VoidCallback onDelete;
+  final VoidCallback onEdit;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(
-        '${index.toString()}.',
-        style: FluentTheme.of(context).typography.title,
+      leading: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '${index.toString()}.',
+            style: FluentTheme.of(context).typography.title,
+          ),
+          CubeImageWidget(
+            rotateOnClick: true,
+            setup: alg.setup,
+            ignoreMap: ignoreMap,
+          ),
+        ],
       ),
-      trailing: CubeImageWidget(
-        setup: alg.setup,
-        ignoreMap: ignoreMap,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            alg.name,
+            style: FluentTheme.of(context).typography.bodyStrong,
+          ),
+          Expanded(
+            child: CommandBar(
+              mainAxisAlignment: MainAxisAlignment.end,
+              primaryItems: [
+                CommandBarBuilderItem(
+                  builder: (context, mode, w) => Tooltip(
+                    message: "Edit algorithm",
+                    child: w,
+                  ),
+                  wrappedItem: CommandBarButton(
+                    icon: const Icon(FluentIcons.edit),
+                    label: const Text('Edit'),
+                    onPressed: onEdit,
+                  ),
+                ),
+                CommandBarBuilderItem(
+                  builder: (context, mode, w) => Tooltip(
+                    message: "Delete algorithm",
+                    child: w,
+                  ),
+                  wrappedItem: CommandBarButton(
+                    icon: const Icon(FluentIcons.delete),
+                    label: const Text('Delete'),
+                    onPressed: onDelete,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      title: Text(
-        alg.name,
-        style: FluentTheme.of(context).typography.bodyStrong,
-      ),
-      subtitle: Text(
-        'Main: ${alg.main?.toAlgString()} \nSetup: ${alg.setup.toAlgString()}',
-        maxLines: 2,
-        style: FluentTheme.of(context).typography.bodyLarge,
+      subtitle: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${alg.main?.toAlgString()}',
+            style: FluentTheme.of(context).typography.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                ),
+          ),
+        ],
       ),
     );
   }
